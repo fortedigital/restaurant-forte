@@ -3,6 +3,7 @@ package no.fortedigital.restaurant.forte
 import kotlinx.datetime.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.ZoneId
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.hours
 
@@ -11,7 +12,13 @@ internal class ReservationTest {
     fun `should throw on max capacity on reservations`() {
         val maxCapacity = assertThrows<IllegalArgumentException> {
             val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 19, minute = 0)
+                .toJavaLocalDateTime().atZone(
+                ZoneId.systemDefault()
+            )
             val endTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 20, minute = 0)
+                .toJavaLocalDateTime().atZone(
+                    ZoneId.systemDefault()
+                )
             val guests = TotalGuests(13)
             Reservation(startTime = startTime, endTime = endTime, totalGuests = guests)
         }
@@ -22,7 +29,13 @@ internal class ReservationTest {
     fun `should throw on dates without of bounds`() {
         val datesNotWithinBounds = assertThrows<IllegalArgumentException> {
             val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 19, minute = 0)
+                .toJavaLocalDateTime().atZone(
+                    ZoneId.systemDefault()
+                )
             val endTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 20, minute = 0)
+                .toJavaLocalDateTime().atZone(
+                    ZoneId.systemDefault()
+                )
             val guests = TotalGuests(1)
             Reservation(startTime = endTime, endTime = startTime, totalGuests = guests)
         }
@@ -34,7 +47,13 @@ internal class ReservationTest {
     fun `should throw on too low capacity reservation`() {
         val tooLowCapacity = assertThrows<IllegalArgumentException> {
             val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 19, minute = 0)
+                .toJavaLocalDateTime().atZone(
+                    ZoneId.systemDefault()
+                )
             val endTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 20, minute = 0)
+                .toJavaLocalDateTime().atZone(
+                    ZoneId.systemDefault()
+                )
             val guests = TotalGuests(0)
             Reservation(startTime = startTime, endTime = endTime, totalGuests = guests)
         }
@@ -44,7 +63,13 @@ internal class ReservationTest {
     @Test
     fun `should create a reservation successfully`() {
         val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 19, minute = 0)
+            .toJavaLocalDateTime().atZone(
+                ZoneId.systemDefault()
+            )
         val endTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 20, minute = 30)
+            .toJavaLocalDateTime().atZone(
+                ZoneId.systemDefault()
+            )
         val guests = TotalGuests(2)
         val reservation = Reservation(startTime = startTime, endTime = endTime, totalGuests = guests)
         assertEquals(1.5.hours, reservation.duration)
