@@ -29,6 +29,8 @@ services:
     ports:
       - "9000:8080"
     restart: on-failure
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
     depends_on:
       - zookeeper
       - kafka
