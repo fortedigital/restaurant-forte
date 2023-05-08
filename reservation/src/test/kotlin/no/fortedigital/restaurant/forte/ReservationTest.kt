@@ -1,6 +1,7 @@
 package no.fortedigital.restaurant.forte
 
 import kotlinx.datetime.*
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.ZoneId
@@ -13,8 +14,8 @@ internal class ReservationTest {
         val maxCapacity = assertThrows<IllegalArgumentException> {
             val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 19, minute = 0)
                 .toJavaLocalDateTime().atZone(
-                ZoneId.systemDefault()
-            )
+                    ZoneId.systemDefault()
+                )
             val endTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 20, minute = 0)
                 .toJavaLocalDateTime().atZone(
                     ZoneId.systemDefault()
@@ -73,5 +74,20 @@ internal class ReservationTest {
         val guests = TotalGuests(2)
         val reservation = Reservation(startTime = startTime, endTime = endTime, totalGuests = guests)
         assertEquals(1.5.hours, reservation.duration)
+    }
+
+    @Test
+    fun `can deserialize a reservationdto to reservation`() {
+        val json = """
+            {
+              "startTime": "2023-05-08T04:00+02:00[Europe/Oslo]",
+              "endTime": "2023-05-08T05:00+02:00[Europe/Oslo]",
+              "totalGuests": 11,
+              "initiator": "guest@example.com"
+            }
+        """.trimIndent()
+        val reservation = Json.decodeFromString(ReservationDTO.serializer(), json).toReservation()
+        assertEquals(11, reservation.totalGuests.amount)
+        assertEquals(1.hours, reservation.duration)
     }
 }
