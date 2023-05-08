@@ -80,7 +80,7 @@ internal class ReservationTest {
     fun `can deserialize a reservationdto to reservation`() {
         val json = """
             {
-              "startTime": "2023-05-08T04:00+02:00[Europe/Oslo]",
+              "startTime": "2023-05-08T04:00+02:00",
               "endTime": "2023-05-08T05:00+02:00[Europe/Oslo]",
               "totalGuests": 11,
               "initiator": "guest@example.com"
