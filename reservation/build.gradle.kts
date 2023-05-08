@@ -9,6 +9,7 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     kotlin("jvm") version "1.8.21"
+    kotlin("plugin.serialization") version "1.8.21"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -28,6 +29,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
     implementation("org.apache.kafka:kafka-clients:3.4.0")
+
+    // Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
+    // Datetime
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }
 
 kotlin {
