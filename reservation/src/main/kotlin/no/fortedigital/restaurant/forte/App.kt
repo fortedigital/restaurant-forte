@@ -13,8 +13,6 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.security.auth.SecurityProtocol
 import org.apache.kafka.common.serialization.StringSerializer
 import java.time.ZoneId
-import kotlin.random.Random
-import kotlin.random.nextInt
 
 fun main() {
     val properties = mapOf(
@@ -28,8 +26,9 @@ fun main() {
     val producer = KafkaProducer<String, String>(properties)
 
     val topic = "restaurant-forte-rapid-v1" // TODO only dummy topic for now
-    val randomStartTime = Random.nextInt(0 until 22)
-    val randomGuestCount = Random.nextInt(1 until 12)
+
+    val randomStartTime = (0 until 22).random()
+    val randomGuestCount = (1 until 12).random()
 
     val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = randomStartTime, minute = 0)
         .toJavaLocalDateTime().atZone(
