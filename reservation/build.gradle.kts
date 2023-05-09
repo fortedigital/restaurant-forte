@@ -6,10 +6,15 @@
  * User Manual available at https://docs.gradle.org/7.6/userguide/building_java_projects.html
  */
 
+
 plugins {
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    kotlin("jvm") version "1.8.21"
-    kotlin("plugin.serialization") version "1.8.21"
+    val ktorVersion = "2.3.0"
+    val kotlinVersion = "1.8.21"
+
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
+    id("io.ktor.plugin") version ktorVersion
+
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -21,8 +26,17 @@ repositories {
 }
 
 dependencies {
+    val ktorVersion = "2.3.0"
+    val kotlinVersion = "1.8.21"
+
+    // Ktor
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
     // Use the Kotlin JUnit 5 integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
 
     // Use the JUnit 5 integration.
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.1")
@@ -35,6 +49,10 @@ dependencies {
 
     // Datetime
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+    // Logging
+    implementation("ch.qos.logback:logback-classic:1.4.7")
+
 }
 
 kotlin {
