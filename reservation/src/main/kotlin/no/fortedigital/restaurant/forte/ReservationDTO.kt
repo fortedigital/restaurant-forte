@@ -7,6 +7,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import no.fortedigital.models.event.EventMessage
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,14 +34,15 @@ data class ReservationDTO(
     val initiator: String
 )
 
-internal fun Reservation.toDTO(): ReservationDTO {
-    return ReservationDTO(
+internal fun Reservation.toDTO() = EventMessage(
+    type = "RESERVATION_CREATED",
+    payload = ReservationDTO(
         startTime = startTime,
         endTime = endTime,
         totalGuests = totalGuests.amount,
         initiator = "guest@example.com"
     )
-}
+)
 
 internal fun ReservationDTO.toReservation() =
     Reservation(startTime = startTime, endTime = endTime, totalGuests = TotalGuests(amount = totalGuests))

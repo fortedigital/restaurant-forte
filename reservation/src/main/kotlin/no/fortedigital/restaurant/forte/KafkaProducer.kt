@@ -3,6 +3,8 @@ package no.fortedigital.restaurant.forte
 import kotlinx.datetime.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import no.fortedigital.models.event.EventBusProducer
+import no.fortedigital.models.event.EventMessage
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -13,17 +15,7 @@ import java.time.ZoneId
 
 
 fun produce() {
-    val properties = mapOf(
-        CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
-        ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java.name,
-        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java.name,
-        ProducerConfig.CLIENT_ID_CONFIG to "reservation", //FIXME make use of env,
-        CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.PLAINTEXT.name
-
-    )
-    val producer = KafkaProducer<String, String>(properties)
-
-    val topic = "restaurant-forte-rapid-v1" // TODO only dummy topic for now
+    val producer = KafkaProducer("restaurant-forte-rapid-v1") // TODO only dummy topic for now
 
     val randomStartTime = (0 until 22).random()
     val randomGuestCount = (1 until 12).random()
@@ -39,11 +31,31 @@ fun produce() {
     val totalGuests = TotalGuests(amount = randomGuestCount)
 
     val reservation = Reservation(startTime = startTime, endTime = endTime, totalGuests = totalGuests).toDTO()
-    val message = Json.encodeToString(reservation)
-    val record = ProducerRecord<String, String>(topic, message)
 
-    println("Record: ${record.timestamp()} - ${record.value()} ")
-    producer.use { it.send(record) }
+    println("Producing message!")
+    producer.produce(reservation)
     println("Closing record...")
     println("Producer closed")
+}
+
+class KafkaProducer(private val topic: String) : EventBusProducer<ReservationDTO> {
+    private companion object {
+        private val properties = mapOf(
+            CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java.name,
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java.name,
+            ProducerConfig.CLIENT_ID_CONFIG to "reservation", //FIXME make use of env,
+            CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.PLAINTEXT.name
+        )
+    }
+
+    private val producer = KafkaProducer<String, String>(properties)
+
+    override fun produce(message: EventMessage<ReservationDTO>) {
+        val json = Json.encodeToString(message)
+        return producer.use {
+            it.send(ProducerRecord(topic, json))
+        }
+    }
+
 }

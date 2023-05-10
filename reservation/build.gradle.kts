@@ -11,6 +11,8 @@ val ktorVersion: String by project
 apply(plugin = "io.ktor.plugin")
 
 dependencies {
+    api(project(":models"))
+
     // Ktor
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
