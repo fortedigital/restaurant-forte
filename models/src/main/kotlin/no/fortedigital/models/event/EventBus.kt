@@ -1,7 +1,7 @@
 package no.fortedigital.models.event
 
 interface EventBusProducer<MessageType> {
-    fun produce(message: EventMessage<MessageType>)
+    fun produce(topic: String, message: EventMessage<MessageType>)
 }
 
 interface EventBusConsumer<MessageType> {

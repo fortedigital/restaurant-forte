@@ -15,7 +15,7 @@ import java.time.ZoneId
 
 
 fun produce() {
-    val producer = KafkaProducer("restaurant-forte-rapid-v1") // TODO only dummy topic for now
+    val producer = KafkaProducer() // TODO only dummy topic for now
 
     val randomStartTime = (0 until 22).random()
     val randomGuestCount = (1 until 12).random()
@@ -33,12 +33,12 @@ fun produce() {
     val reservation = Reservation(startTime = startTime, endTime = endTime, totalGuests = totalGuests).toDTO()
 
     println("Producing message!")
-    producer.produce(reservation)
+    producer.produce(topic = "restaurant-forte-rapid-v1", message = reservation)
     println("Closing record...")
     println("Producer closed")
 }
 
-class KafkaProducer(private val topic: String) : EventBusProducer<ReservationDTO> {
+class KafkaProducer : EventBusProducer<ReservationDTO> {
     private companion object {
         private val properties = mapOf(
             CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
@@ -51,7 +51,7 @@ class KafkaProducer(private val topic: String) : EventBusProducer<ReservationDTO
 
     private val producer = KafkaProducer<String, String>(properties)
 
-    override fun produce(message: EventMessage<ReservationDTO>) {
+    override fun produce(topic: String, message: EventMessage<ReservationDTO>) {
         val json = Json.encodeToString(message)
         return producer.use {
             it.send(ProducerRecord(topic, json))
