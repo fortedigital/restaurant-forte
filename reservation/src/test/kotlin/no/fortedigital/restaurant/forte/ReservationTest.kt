@@ -2,6 +2,7 @@ package no.fortedigital.restaurant.forte
 
 import kotlinx.datetime.*
 import kotlinx.serialization.json.Json
+import no.fortedigital.restaurant.forte.reservation.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.ZoneId
@@ -80,14 +81,15 @@ internal class ReservationTest {
     fun `can deserialize a reservationdto to reservation`() {
         val json = """
             {
-              "startTime": "2023-05-08T04:00+02:00",
-              "endTime": "2023-05-08T05:00+02:00[Europe/Oslo]",
+              "startTime": "2023-05-08T04:00",
+              "endTime": "2023-05-08T05:00",
               "totalGuests": 11,
               "initiator": "guest@example.com"
             }
         """.trimIndent()
-        val reservation = Json.decodeFromString(ReservationDTO.serializer(), json).toReservation()
+        val reservation = Json.decodeFromString(ReservationPostDTO.serializer(), json).toReservation()
         assertEquals(11, reservation.totalGuests.amount)
         assertEquals(1.hours, reservation.duration)
+
     }
 }

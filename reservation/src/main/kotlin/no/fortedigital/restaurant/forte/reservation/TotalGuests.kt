@@ -1,4 +1,4 @@
-package no.fortedigital.restaurant.forte
+package no.fortedigital.restaurant.forte.reservation
 
 const val MAX_TABLE_CAPACITY = 12
 

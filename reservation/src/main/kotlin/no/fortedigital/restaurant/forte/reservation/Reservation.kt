@@ -1,12 +1,14 @@
-package no.fortedigital.restaurant.forte
+package no.fortedigital.restaurant.forte.reservation
 
 import java.time.ZonedDateTime
+import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
 class Reservation(
     val startTime: ZonedDateTime,
     val endTime: ZonedDateTime,
-    val totalGuests: TotalGuests
+    val totalGuests: TotalGuests,
+    val id: UUID = UUID.randomUUID()
 ) {
     init {
         require(startTime <= endTime) {
