@@ -1,9 +1,12 @@
 package no.fortedigital.restaurant.forte
 
 import kotlinx.datetime.*
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import no.fortedigital.models.event.EventMessage
 import no.fortedigital.restaurant.forte.reservation.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import java.time.ZoneId
 import kotlin.test.assertEquals
@@ -91,5 +94,24 @@ internal class ReservationTest {
         assertEquals(11, reservation.totalGuests.amount)
         assertEquals(1.hours, reservation.duration)
 
+    }
+
+    @Test
+    fun `can serialize to json`() {
+        val startTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 19, minute = 0)
+            .toJavaLocalDateTime().atZone(
+                ZoneId.systemDefault()
+            )
+        val endTime = Clock.System.todayIn(TimeZone.currentSystemDefault()).atTime(hour = 20, minute = 0)
+            .toJavaLocalDateTime().atZone(
+                ZoneId.systemDefault()
+            )
+        val event = EventMessage(
+            "RESERVATION_CREATED",
+            ReservationDTO(startTime = startTime, endTime = endTime, totalGuests = 2, initiator = "hei")
+        )
+        assertDoesNotThrow {
+            Json.encodeToString(event)
+        }
     }
 }
