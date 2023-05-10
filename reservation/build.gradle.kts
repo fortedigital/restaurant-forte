@@ -6,57 +6,19 @@
  * User Manual available at https://docs.gradle.org/7.6/userguide/building_java_projects.html
  */
 
+val ktorVersion: String by project
 
-plugins {
-    val ktorVersion = "2.3.0"
-    val kotlinVersion = "1.8.21"
-
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
-    id("io.ktor.plugin") version ktorVersion
-
-
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
-}
-
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
+apply(plugin = "io.ktor.plugin")
 
 dependencies {
-    val ktorVersion = "2.3.0"
-    val kotlinVersion = "1.8.21"
-
     // Ktor
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    // Use the Kotlin JUnit 5 integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlinVersion")
-
-    // Use the JUnit 5 integration.
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.1")
-
     // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
     implementation("org.apache.kafka:kafka-clients:3.4.0")
-
-    // Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-
-    // Datetime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-
-    // Logging
-    implementation("ch.qos.logback:logback-classic:1.4.7")
-
-}
-
-kotlin {
-    jvmToolchain(17)
 }
 
 application {
@@ -75,11 +37,5 @@ tasks {
                 if (it.isDirectory) it else zipTree(it)
             },
         )
-    }
-    test {
-        useJUnitPlatform()
-        testLogging {
-            events("skipped", "failed")
-        }
     }
 }
