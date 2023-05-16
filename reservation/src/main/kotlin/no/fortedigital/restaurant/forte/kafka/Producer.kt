@@ -11,7 +11,7 @@ import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 
-class Producer : EventBusProducer<ReservationDTO> {
+class Producer : EventBusProducer<ReservationDTO>, AutoCloseable {
     private companion object {
         private val properties = mapOf(
             CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
@@ -27,4 +27,6 @@ class Producer : EventBusProducer<ReservationDTO> {
         val json = Json.encodeToString(message)
         producer.send(ProducerRecord(topic, message.payload.id.toString(), json))
     }
+
+    override fun close() = producer.close()
 }

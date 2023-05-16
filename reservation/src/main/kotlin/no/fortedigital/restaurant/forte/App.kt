@@ -16,12 +16,6 @@ private val ioCoroutineScope = CoroutineScope(Dispatchers.IO)
 
 fun main() {
     applicationServer()
-        .apply {
-            addShutdownHook {
-                println("Shutting down...")
-                ioCoroutineScope.cancel()
-            }
-        }
         .start(wait = true)
 }
 
@@ -32,6 +26,10 @@ fun Application.server() {
 
     configureRouting(ioCoroutineScope, reservationProducer)
     configureSerialization()
+    Runtime.getRuntime().addShutdownHook(Thread {
+        ioCoroutineScope.cancel()
+        reservationProducer.close()
+    })
 }
 
 private fun Application.configureSerialization() {
