@@ -34,9 +34,7 @@ fun Application.server() {
 
 private fun Application.configureSerialization() {
     install(ContentNegotiation) {
-        json(json = Json {
-            ignoreUnknownKeys = true
-        })
+        json(json = jsonFormatter)
     }
 }
 

@@ -8,4 +8,4 @@
  */
 
 rootProject.name = "restaurant-forte"
-include("reservation", "models")
+include("reservation", "models", "confirmation")

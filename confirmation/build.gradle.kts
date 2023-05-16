@@ -21,7 +21,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
-    implementation("org.apache.kafka:kafka-clients:$kafkaVersion")
+    implementation("org.apache.kafka:kafka-clients:3.4.0")
 }
 
 application {

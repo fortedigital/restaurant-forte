@@ -2,7 +2,6 @@ package no.fortedigital.restaurant.forte
 
 import kotlinx.datetime.*
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import no.fortedigital.models.event.EventMessage
 import no.fortedigital.restaurant.forte.reservation.*
 import org.junit.jupiter.api.Test
@@ -90,7 +89,7 @@ internal class ReservationTest {
               "initiator": "guest@example.com"
             }
         """.trimIndent()
-        val reservation = Json.decodeFromString(ReservationPostDTO.serializer(), json).toReservation()
+        val reservation = jsonFormatter.decodeFromString(ReservationPostDTO.serializer(), json).toReservation()
         assertEquals(11, reservation.totalGuests.amount)
         assertEquals(1.hours, reservation.duration)
 
@@ -111,7 +110,7 @@ internal class ReservationTest {
             ReservationDTO(startTime = startTime, endTime = endTime, totalGuests = 2, initiator = "hei")
         )
         assertDoesNotThrow {
-            Json.encodeToString(event)
+            jsonFormatter.encodeToString(event)
         }
     }
 }
