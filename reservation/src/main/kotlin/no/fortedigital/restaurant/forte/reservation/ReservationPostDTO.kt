@@ -20,6 +20,5 @@ internal fun ReservationPostDTO.toReservation() =
     Reservation(
         startTime = startTime.toJavaLocalDateTime().atZone(ZoneId.systemDefault()),
         endTime = endTime.toJavaLocalDateTime().atZone(ZoneId.systemDefault()),
-        totalGuests = TotalGuests(amount = totalGuests),
-        id = UUID.randomUUID()
+        totalGuests = TotalGuests(amount = totalGuests)
     )

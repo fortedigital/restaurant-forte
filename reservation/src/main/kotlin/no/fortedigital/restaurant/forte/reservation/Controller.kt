@@ -6,9 +6,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import no.fortedigital.restaurant.forte.kafka.KafkaProducer
+import no.fortedigital.restaurant.forte.kafka.Producer
 
-internal fun Routing.reservation(ioScope: CoroutineScope, producer: KafkaProducer) {
+internal fun Routing.reservation(ioScope: CoroutineScope, producer: Producer) {
     route("reservation") {
         post {
             val reservation = call.receive<ReservationPostDTO>().toReservation()

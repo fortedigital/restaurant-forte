@@ -9,7 +9,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
-import no.fortedigital.restaurant.forte.kafka.KafkaProducer
+import no.fortedigital.restaurant.forte.kafka.Producer
 import no.fortedigital.restaurant.forte.reservation.reservation
 
 private val ioCoroutineScope = CoroutineScope(Dispatchers.IO)
@@ -28,7 +28,7 @@ fun main() {
 fun applicationServer() = embeddedServer(factory = Netty, module = Application::server)
 
 fun Application.server() {
-    val reservationProducer = KafkaProducer()
+    val reservationProducer = Producer()
 
     configureRouting(ioCoroutineScope, reservationProducer)
     configureSerialization()
@@ -42,7 +42,7 @@ private fun Application.configureSerialization() {
     }
 }
 
-private fun Application.configureRouting(ioScope: CoroutineScope, reservationProducer: KafkaProducer) {
+private fun Application.configureRouting(ioScope: CoroutineScope, reservationProducer: Producer) {
     routing {
         reservation(ioScope, reservationProducer)
         health()
