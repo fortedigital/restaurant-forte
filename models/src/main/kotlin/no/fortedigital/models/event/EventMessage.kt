@@ -1,6 +1,7 @@
 package no.fortedigital.models.event
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -11,7 +12,9 @@ import java.util.UUID
 
 // Generic data class used to send messages on the message queue using the same structure
 @Serializable
-data class EventMessage<T: Identifiable>(val type: String, val payload: T)
+data class EventMessage<T : Identifiable>(
+    @SerialName("@type") val type: String, val payload: T
+)
 
 object UUIDSerializer : KSerializer<UUID> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
