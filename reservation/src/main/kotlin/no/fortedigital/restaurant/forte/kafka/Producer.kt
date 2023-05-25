@@ -1,18 +1,17 @@
 package no.fortedigital.restaurant.forte.kafka
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import no.fortedigital.models.event.EventBusProducer
-import no.fortedigital.models.event.EventMessage
 import no.fortedigital.models.event.Identifiable
-import no.fortedigital.restaurant.forte.jsonFormatter
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
+import org.slf4j.LoggerFactory
 
-internal class Producer : EventBusProducer<Identifiable>, AutoCloseable {
+internal class Producer : EventBusProducer, AutoCloseable {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     private companion object {
         private val properties = mapOf(
             CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to "localhost:29092",
@@ -25,7 +24,13 @@ internal class Producer : EventBusProducer<Identifiable>, AutoCloseable {
     private val producer = KafkaProducer<String, String>(properties)
 
     override suspend fun produce(topic: String, message: String, key: String?) {
-        producer.send(ProducerRecord(topic, key, message))
+        producer.send(
+            ProducerRecord(
+                topic,
+                key,
+                message
+            )
+        ) { metadata, exception -> logger.info("PRODUCED MESSAGE WITH TOPIC $topic with content $message") }
     }
 
     override fun close() = producer.close()

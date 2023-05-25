@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/confirmation/restaurant-forte.confirmation.main.iml" filepath="$PROJECT_DIR$/.idea/modules/confirmation/restaurant-forte.confirmation.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/models/restaurant-forte.models.main.iml" filepath="$PROJECT_DIR$/.idea/modules/models/restaurant-forte.models.main.iml" />
     </modules>
   </component>

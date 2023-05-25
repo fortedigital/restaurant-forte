@@ -50,6 +50,7 @@ subprojects {
 
         // Logging
         implementation("ch.qos.logback:logback-classic:1.4.7")
+        implementation("net.logstash.logback:logstash-logback-encoder:7.2")
     }
 
     kotlin {

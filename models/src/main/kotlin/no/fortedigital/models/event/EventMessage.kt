@@ -8,12 +8,14 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.util.UUID
+import java.util.*
 
 // Generic data class used to send messages on the message queue using the same structure
 @Serializable
-data class EventMessage<T : Identifiable>(
-    @SerialName("@type") val type: String, val payload: T
+data class EventMessage<T>(
+    @SerialName("@type") val type: String,
+    val payload: T,
+    @Serializable(with = UUIDSerializer::class) val id: UUID = UUID.randomUUID()
 )
 
 object UUIDSerializer : KSerializer<UUID> {

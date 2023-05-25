@@ -32,5 +32,6 @@ internal fun Reservation.toEventMessage() = EventMessage(
         totalGuests = totalGuests.amount,
         initiator = "guest@example.com",
         id = id
-    )
+    ),
+    id = id
 )

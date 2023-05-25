@@ -1,11 +1,11 @@
 package no.fortedigital.models.event
 
-interface EventBusProducer<MessageType: Identifiable> {
+interface EventBusProducer {
     suspend fun produce(topic: String, message: String, key: String? = null)
 }
 
-interface EventBusConsumer<MessageType: Identifiable> {
-    suspend fun consume(topic: String, handler: (List<EventMessage<MessageType>>) -> Unit)
+interface EventBusConsumer {
+    suspend fun consume(topic: String, handler: suspend (List<Packet>) -> Unit)
 }
 
-interface EventBus<MessageType: Identifiable> : EventBusProducer<MessageType>, EventBusConsumer<MessageType>
+interface EventBus : EventBusProducer, EventBusConsumer
